@@ -1,0 +1,17 @@
+<!-- src/main/resources/templates/fragments/header.html -->
+<nav th:fragment="header" class="bg-primary text-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="text-2xl font-bold">RocMovies</div>
+        <div class="flex items-center space-x-4">
+            <a href="http://localhost:8080/rocmovies/" class="hover:text-gray-300" th:text="#{nav.home}">Accueil</a>
+            <form th:action="@{/}" method="get" class="flex items-center">
+                <select name="lang" id="languageSelect" class="bg-white text-primary px-2 py-1 rounded" onchange="this.form.submit()">
+                    <option value="fr" th:selected="${#locale.language == 'fr'}" th:text="#{lang.fr}">Français</option>
+                    <option value="en" th:selected="${#locale.language == 'en'}" th:text="#{lang.en}">English</option>
+                    <option value="es" th:selected="${#locale.language == 'es'}" th:text="#{lang.es}">Español</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</nav>
+

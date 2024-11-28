@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Application",
+            "request": "launch",
+            "mainClass": "com.ndduroc.rocmovies.Application",
+            "projectName": "rocmovies"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-RocmoviesApplication<rocmovies>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ndduroc.rocmovies.RocmoviesApplication",
+            "projectName": "rocmovies",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=39915 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=rocmovies"
+        }
+    ]
+}

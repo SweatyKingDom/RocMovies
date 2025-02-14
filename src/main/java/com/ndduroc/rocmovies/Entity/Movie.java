@@ -1,26 +1,40 @@
 package com.ndduroc.rocmovies.Entity;
 
-import jakarta.annotation.Generated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+@Entity
+@Table(name = "movie")
 public class Movie {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    private Long idMovie;
+    private Integer idMovie;
 
     @NotBlank
     @Size(max = 100)
     private String title;
 
-    @NotNull
-    private MovieStyles style;
+    @ManyToOne
+    @JoinColumn(name = "style_id")
+    private Style style;
+
+    @ManyToOne
+    @JoinColumn(name = "productor_id")
+    private Productor producedBy;
 
     @NotNull
     private Integer productionYear;
-
 
     @Pattern(regexp = "[A-Z]{2,3}-\\d{6}", message = "La référence doit être au format 'XX-XXXXXX' ou 'XXX-XXXXXX' où X est une lettre majuscule et X est un chiffre.")
     private String reference;
@@ -30,7 +44,7 @@ public class Movie {
 
     public Movie() {}
 
-    public Movie(Long idMovie, String title, MovieStyles style, int productionYear, String reference, String description) {
+    public Movie(Integer idMovie, String title, Style style, int productionYear, String reference, String description) {
         this.idMovie = idMovie;
         this.title = title;
         this.style = style;
@@ -40,11 +54,11 @@ public class Movie {
     }
 
     // Getters and setters
-    public Long getIdMovie() {
+    public Integer getIdMovie() {
         return idMovie;
     }
 
-    public void setIdMovie(Long idMovie) {
+    public void setIdMovie(Integer idMovie) {
         this.idMovie = idMovie;
     }
 
@@ -56,11 +70,11 @@ public class Movie {
         this.title = title;
     }
 
-    public MovieStyles getStyle() {
+    public Style getStyle() {
         return style;
     }
 
-    public void setStyle(MovieStyles style) {
+    public void setStyle(Style style) {
         this.style = style;
     }
 

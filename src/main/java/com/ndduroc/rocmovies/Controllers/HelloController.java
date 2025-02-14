@@ -1,7 +1,7 @@
 package com.ndduroc.rocmovies.Controllers;
 
 import com.ndduroc.rocmovies.Entity.Movie;
-import com.ndduroc.rocmovies.Entity.MovieStyles;
+import com.ndduroc.rocmovies.Entity.Style;
 import com.ndduroc.rocmovies.Services.IMovieService;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class HelloController {
     private IMovieService movieService;
 
     @GetMapping("/")
-    public String index(@RequestParam(name = "style", required = false) MovieStyles style, Model model) {
+    public String index(@RequestParam(name = "style", required = false) Style style, Model model) {
         try {
             List<Movie> movies = movieService.getListMovies();
             if (style != null) {
@@ -40,7 +40,7 @@ public class HelloController {
             model.addAttribute("welcomeMessage", welcomeMessage);
             model.addAttribute("movies", movies);
             model.addAttribute("selectedStyle", style);
-            model.addAttribute("allStyles", MovieStyles.values());
+            // model.addAttribute("allStyles", Style.values());
             return "hello";
         } catch (Exception e) {
             throw new ResponseStatusException(

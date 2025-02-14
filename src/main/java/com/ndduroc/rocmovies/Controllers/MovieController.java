@@ -1,7 +1,7 @@
 package com.ndduroc.rocmovies.Controllers;
 
 import com.ndduroc.rocmovies.Entity.Movie;
-import com.ndduroc.rocmovies.Entity.MovieStyles;
+import com.ndduroc.rocmovies.Entity.Style;
 import com.ndduroc.rocmovies.Services.IMovieService;
 
 
@@ -26,7 +26,7 @@ public class MovieController {
     // private IMovieService movieService2;
 
     @GetMapping
-    public List<Movie> getAllMovies(@RequestParam(name = "style", required = false) MovieStyles style) {
+    public List<Movie> getAllMovies(@RequestParam(name = "style", required = false) Style style) {
         try {
             List<Movie> list = movieService.getListMovies();
             if (style != null) {

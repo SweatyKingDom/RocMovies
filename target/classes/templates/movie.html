@@ -61,7 +61,7 @@
                                 <span class="px-4 py-2 bg-secondary rounded-full text-sm font-semibold" th:text="${movie.productionYear}">
                                     Année
                                 </span>
-                                <span class="px-4 py-2 bg-gray-800 rounded-full text-sm font-semibold" th:text="${movie.style}">
+                                <span class="px-4 py-2 bg-gray-800 rounded-full text-sm font-semibold" th:text="${movie.style.styleName}">
                                     Style
                                 </span>
                                 <span class="px-4 py-2 bg-gray-800 rounded-full text-sm font-semibold">
@@ -84,7 +84,7 @@
                                         </div>
                                         <div class="bg-gray-800 p-4 rounded-lg">
                                             <span class="text-gray-400" th:text="#{movie.details.genre}">Genre</span>
-                                            <p class="text-xl font-semibold" th:text="${movie.style}">Style</p>
+                                            <p class="text-xl font-semibold" th:text="${movie.style.styleName}">Style</p>
                                         </div>
                                     </div>
                                 </div>

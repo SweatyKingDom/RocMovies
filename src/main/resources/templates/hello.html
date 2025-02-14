@@ -53,9 +53,9 @@
                 <select id="style" name="style" class="form-select mt-1 block w-full md:w-64 pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary rounded-md">
                     <option value="" th:text="#{filter.all}">Tous les genres</option>
                     <option th:each="style : ${allStyles}" 
-                            th:value="${style}" 
-                            th:text="${style}"
-                            th:selected="${style == selectedStyle}">Genre</option>
+                            th:value="${style.styleId}" 
+                            th:text="${style.styleName}"
+                            th:selected="${style.styleId} == ${selectedStyle?.styleId}">Genre</option>
                 </select>
                 <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition duration-300" th:text="#{filter.button}">
                     Filtrer
@@ -66,7 +66,8 @@
         <!-- Current Filter Display -->
         <div th:if="${selectedStyle}" class="mb-8 text-center">
             <p class="text-lg text-gray-300">
-                <span th:text="#{filter.current}">Films filtrés par genre:</span> <span class="font-semibold text-secondary" th:text="${selectedStyle}">Genre</span>
+                <span th:text="#{filter.current}">Films filtrés par genre:</span>
+                <span class="font-semibold text-secondary" th:text="${selectedStyle.styleName}">Genre</span>
                 <a href="/rocmovies" class="ml-2 text-blue-400 hover:text-blue-300 underline" th:text="#{filter.reset}">Réinitialiser le filtre</a>
             </p>
         </div>
@@ -91,7 +92,7 @@
                 </div>
                 <div class="p-4 space-y-4">
                     <p class="text-sm text-gray-400">
-                        <span th:text="#{movie.genre}">Genre:</span> <span class="text-secondary font-semibold" th:text="${movie.style}">Movie Style</span>
+                        <span th:text="#{movie.genre}">Genre:</span> <span class="text-secondary font-semibold" th:text="${movie.style.styleName}">Movie Style</span>
                     </p>
                     <!-- description section -->
                     <p class="text-sm text-gray-400">
@@ -109,7 +110,48 @@
                 </div>
             </div>
         </div>
+        <!-- Section Emprunts -->
 
+        <div class="mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Emprunts</h2>
+                    <!-- Filtre par Genre et Client -->
+        <form action="/rocmovies" method="get" class="mb-12 bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <!-- Filtre par Client -->
+                <label for="customer" class="text-lg font-medium text-gray-300">Filtrer par client:</label>
+                <select id="customer" name="customer" class="form-select mt-1 block w-full md:w-64 pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary rounded-md">
+                    <option value="">Tous les clients</option>
+                    <option th:each="customer : ${allCustomers}" 
+                            th:value="${customer.customerId}" 
+                            th:text="${customer.name}"
+                            th:selected="${customer.customerId} == ${selectedCustomer?.customerId}">
+                        Client
+                    </option>
+                </select>
+                <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition duration-300" th:text="#{filter.button}">
+                    Filtrer
+                </button>
+            </div>
+        </form>
+            <table class="min-w-full bg-gray-800">
+                <thead>
+                    <tr>
+                        <th class="py-2">Nom du client</th>
+                        <th class="py-2">Titre du film</th>
+                        <th class="py-2">Date d'emprunt</th>
+                        <th class="py-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="borrow : ${borrows}" class="text-center border-t border-gray-700">
+                        <td class="py-2" th:text="${borrow.customer.name}">Nom client</td>
+                        <td class="py-2" th:text="${borrow.movie.title}">Titre du film</td>
+                        <td class="py-2" th:text="${#dates.format(borrow.date, 'dd/MM/yyyy')}">Date</td>
+                        <td class="py-2" th:text="${borrow.status}">Status</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <!-- Upcoming Movies Section -->
         <div class="mt-16">
             <h2 class="text-3xl font-bold mb-8 text-center" th:text="#{upcoming.title}">À venir bientôt</h2>

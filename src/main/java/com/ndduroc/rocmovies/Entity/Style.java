@@ -31,4 +31,15 @@ public class Style {
     @OneToMany(mappedBy = "style")
     private List<Movie> movies;
     
+    public Long getStyleId() {
+        return styleId;
+    }
+    public String getStyleName() {
+        return styleName;
+    }
+    
+    public void setStyleName(String styleName) {
+        this.styleName = styleName;
+    }
+    
 }

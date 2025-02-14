@@ -32,4 +32,20 @@ public class Borrow {
     
     @Size(max = 100)
     private String status;
+
+    public Customer getCustomer() {
+        return customer;
+    }
+    
+    public Date getDate() {
+        return date;
+    }
+    
+    public Movie getMovie() {
+        return movie;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
 }

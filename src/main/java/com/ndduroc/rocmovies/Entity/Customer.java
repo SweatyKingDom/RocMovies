@@ -20,5 +20,9 @@ public class Customer {
     
     @OneToMany(mappedBy = "customer")
     private List<Borrow> borrows;
+
+    public String getName() {
+        return name;
+    }
     
 }

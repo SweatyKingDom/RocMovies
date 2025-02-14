@@ -6,28 +6,26 @@ import com.ndduroc.rocmovies.Entity.Movie;
 import com.ndduroc.rocmovies.Repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
-@Service(value = "movieService1")
+@Service("movieService1")
 public class MovieService1 implements IMovieService {
 
     private final MovieRepository movieRepository;
 
-    public MovieService1() {
-        this.movieRepository = new MovieRepository();
-        System.out.println("Création du service MovieService");
+    public MovieService1(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+        System.out.println("Création du service MovieService1");
     }
 
     @Override
     public List<Movie> getListMovies() {
-        return movieRepository.findAll();
+        return (List<Movie>) movieRepository.findAll();
     }
 
     @Override
     public Optional<Movie> getMovieById(long id) {
-        return getListMovies().stream()
-                .filter(m -> m.getIdMovie() == id)
-                .findFirst();
-    }
-
+        return movieRepository.findById(id);
+    }      
+    
     @Override
     public Movie addMovie(Movie movie) {
         if (movie == null) {
@@ -42,6 +40,7 @@ public class MovieService1 implements IMovieService {
         if (movie.getProductionYear() <= 0) {
             throw new IllegalArgumentException("L'année de production doit être positive");
         }
+
         return movie;
     }
 }

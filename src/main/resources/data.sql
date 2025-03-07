@@ -12,6 +12,33 @@ INSERT INTO movie (id_movie, title, production_year, reference, description, sty
 VALUES (2, 'Dramatic Tales', 2022, 'DT-654321', 'Un film dramatique touchant', 2, 2);
 INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
 VALUES (3, 'Funny Moments', 2023, 'FM-112233', 'Une comédie hilarante', 3, 3);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (4, 'Fast Action 2', 2024, 'FA-654321', 'Un film action palpitant', 1, 1);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (5, 'Dramatic Tales 2', 2025, 'DT-112233', 'Un film dramatique touchant', 2, 2);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (6, 'Funny Moments 2', 2026, 'FM-654321', 'Une comédie hilarante', 3, 3);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (7, 'Fast Action 3', 2027, 'FA-112233', 'Un film action palpitant', 1, 1);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (8, 'Dramatic Tales 3', 2028, 'DT-654321', 'Un film dramatique touchant', 2, 2);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (9, 'Funny Moments 3', 2029, 'FM-112233', 'Une comédie hilarante', 3, 3);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (10, 'Fast Action 4', 2030, 'FA-654321', 'Un film action palpitant', 1, 1);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (11, 'Dramatic Tales 4', 2031, 'DT-112233', 'Un film dramatique touchant', 2, 2);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (12, 'Funny Moments 4', 2032, 'FM-654321', 'Une comédie hilarante', 3, 3);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (13, 'Fast Action 5', 2033, 'FA-112233', 'Un film action palpitant', 1, 1);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (14, 'Dramatic Tales 5', 2034, 'DT-654321', 'Un film dramatique touchant', 2, 2);
+INSERT INTO movie (id_movie, title, production_year, reference, description, style_id, productor_id)
+VALUES (15, 'Funny Moments 5', 2035, 'FM-112233', 'Une comédie hilarante', 3, 3);
+
+
+
 
 INSERT INTO actor (actor_id, last_name, first_name, birth_date) VALUES (1, 'Smith', 'John', '1990-01-01');
 INSERT INTO actor (actor_id, last_name, first_name, birth_date) VALUES (2, 'Doe', 'Jane', '1995-02-02');
@@ -20,6 +47,13 @@ INSERT INTO actor (actor_id, last_name, first_name, birth_date) VALUES (3, 'Davi
 INSERT INTO role (role_id, actor_id, movie_id, role) VALUES (1, 1, 1, 'Protagoniste');
 
 INSERT INTO customer (customer_id, name) VALUES (1, 'Alice');
+INSERT INTO customer (customer_id, name) VALUES (2, 'Bob');
+INSERT INTO customer (customer_id, name) VALUES (3, 'Charlie');
+
 
 INSERT INTO borrow (borrow_id, date, customer_id, movie_id, status)
 VALUES (1, '2023-12-20', 1, 1, 'BORROWED');
+INSERT INTO borrow (borrow_id, date, customer_id, movie_id, status)
+VALUES (2, '2023-12-21', 2, 2, 'BORROWED');
+INSERT INTO borrow (borrow_id, date, customer_id, movie_id, status)
+VALUES (3, '2023-12-22', 3, 3, 'BORROWED');

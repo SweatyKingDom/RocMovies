@@ -12,6 +12,9 @@ import com.ndduroc.rocmovies.Repositories.MovieRepository;
 import com.ndduroc.rocmovies.Repositories.CustomerRepository;
 
 import jakarta.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service("movieService1")
@@ -38,7 +41,15 @@ public class MovieService1 implements IMovieService {
     public Optional<Movie> getMovieById(long id) {
         return movieRepository.findById(id);
     }      
-    
+    @Override
+    public Page<Movie> getPaginatedMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Movie> getMoviesByStyleId(Long styleId, Pageable pageable) {
+        return movieRepository.findByStyleStyleId(styleId, pageable);
+    }
     @Override
     public Movie addMovie(Movie movie) {
         if (movie == null) {
@@ -59,32 +70,31 @@ public class MovieService1 implements IMovieService {
 
     @Transactional
     public boolean transferBorrows(Long sourceCustomerId, Long targetCustomerId) {
-        // check que les custmer existent
+        // check que les customer existent
         if (sourceCustomerId == null || targetCustomerId == null) {
             throw new IllegalArgumentException("Les IDs d'abonnés ne peuvent pas être null");
         }
-        // check que les customet sont fifférent
+        // check que les customet sont différent
         if (sourceCustomerId.equals(targetCustomerId)) {
             throw new IllegalArgumentException("Les IDs d'abonnés source et cible doivent être différents");
         }
         
-        // Simuler un échec aléatoire (50% de chance d'échec)
+        // Simuler un échec aléatoire (50% de chance d''échec)
         if (random.nextInt(2) == 0) {
             throw new RuntimeException("Échec simulé du transfert d'emprunts");
         }
         
-        // Récupérer tous les emprunts de l'abonné source
         List<Borrow> borrowsToTransfer = borrowRepository.findByCustomerCustomerId(sourceCustomerId);
         
         if (borrowsToTransfer.isEmpty()) {
-            return true; // Rien à transférer donc c'est bvon 
+            return true;
         }
         
-        // Récupérer l'abonné cible pour vérifier son existence
+        // Récupérer l'abonné cible pour vérifier son zxistence
         Customer targetCustomer = customerRepository.findById(targetCustomerId)
             .orElseThrow(() -> new IllegalArgumentException("Abonné cible non trouvé"));
         
-        // Effectuer le transfert de chaque emprunt
+        // Effectuer le transfrt de chaque emprunt
         for (Borrow borrow : borrowsToTransfer) {
             borrow.setCustomer(targetCustomer);
             borrowRepository.save(borrow);

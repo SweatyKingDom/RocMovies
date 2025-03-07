@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class Productor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productorId;
+    private Long productorId;
     
     @Column(nullable = false)
     private String name;

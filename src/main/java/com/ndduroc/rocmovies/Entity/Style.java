@@ -10,14 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-// public enum Style {
-//     SF,
-//     DRAME,
-//     THRILLER,
-//     ACTION
-// }
-
-// Style.java
 @Entity
 @Table(name = "style")
 public class Style {

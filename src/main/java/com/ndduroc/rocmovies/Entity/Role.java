@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Size;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roleId;
+    private Long roleId;
     
     @ManyToOne
     @JoinColumn(name = "actor_id")

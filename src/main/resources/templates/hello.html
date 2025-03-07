@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,19 +23,24 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
+
 <body class="bg-gray-900 font-sans text-white">
     <!-- Include Header -->
     <div th:replace="~{layout :: header}"></div>
 
     <!-- Hero Section -->
     <div class="relative bg-black h-[70vh] overflow-hidden">
-        <img src="https://images.hdqwalls.com/download/the-flash-movie-promotion-banner-1f-1600x900.jpg" alt="Featured Movie" class="absolute inset-0 w-full h-full object-cover opacity-50">
+        <img src="https://images.hdqwalls.com/download/the-flash-movie-promotion-banner-1f-1600x900.jpg"
+            alt="Featured Movie" class="absolute inset-0 w-full h-full object-cover opacity-50">
         <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent"></div>
         <div class="container mx-auto px-4 h-full flex items-center relative z-10">
             <div class="max-w-2xl">
                 <h1 class="text-5xl font-bold mb-4" th:text="#{hero.title}">Découvrez l'univers du cinéma</h1>
-                <p class="text-xl mb-8" th:text="#{hero.subtitle}">Plongez dans un monde d'histoires captivantes et d'émotions intenses avec RocMovies</p>
-                <a href="#movies" class="bg-secondary hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition duration-300" th:text="#{hero.button}">Explorez nos films</a>
+                <p class="text-xl mb-8" th:text="#{hero.subtitle}">Plongez dans un monde d'histoires captivantes et
+                    d'émotions intenses avec RocMovies</p>
+                <a href="#movies"
+                    class="bg-secondary hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition duration-300"
+                    th:text="#{hero.button}">Explorez nos films</a>
             </div>
         </div>
     </div>
@@ -46,93 +52,187 @@
             Découvrez les meilleurs films et séries
         </p>
 
-        <!-- Genre Filter Form -->
-        <form action="/rocmovies" method="get" class="mb-12 bg-gray-800 p-6 rounded-lg shadow-lg">
-            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-                <label for="style" class="text-lg font-medium text-gray-300" th:text="#{filter.genre}">Filtrer par genre:</label>
-                <select id="style" name="style" class="form-select mt-1 block w-full md:w-64 pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary rounded-md">
-                    <option value="" th:text="#{filter.all}">Tous les genres</option>
-                    <option th:each="style : ${allStyles}" 
-                            th:value="${style.styleId}" 
-                            th:text="${style.styleName}"
-                            th:selected="${style.styleId} == ${selectedStyle?.styleId}">Genre</option>
-                </select>
-                <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition duration-300" th:text="#{filter.button}">
-                    Filtrer
-                </button>
+        <div class="mb-12 bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold mb-6 text-center">Filtres</h3>
+            <form action="/rocmovies" method="get">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Filtre par Genre -->
+                    <div>
+                        <label for="style" class="block text-lg font-medium text-gray-300 mb-2"
+                            th:text="#{filter.genre}">Filtrer par genre:</label>
+                        <select id="style" name="style"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary">
+                            <option value="" th:text="#{filter.all}">Tous les genres</option>
+                            <option th:each="style : ${allStyles}" th:value="${style.styleId}"
+                                th:text="${style.styleName}"
+                                th:selected="${style.styleId} == ${selectedStyle?.styleId}">Genre</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtre par Client -->
+                    <div>
+                        <label for="customer" class="block text-lg font-medium text-gray-300 mb-2">Filtrer par
+                            client:</label>
+                        <select id="customer" name="customer"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary">
+                            <option value="">Tous les clients</option>
+                            <option th:each="customer : ${allCustomers}" th:value="${customer.customerId}"
+                                th:text="${customer.name}"
+                                th:selected="${customer.customerId} == ${selectedCustomer?.customerId}">
+                                Client
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex justify-center mt-6 space-x-4">
+                    <button type="submit"
+                        class="bg-secondary hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition duration-300"
+                        th:text="#{filter.button}">
+                        Appliquer les filtres
+                    </button>
+                    <a th:if="${selectedStyle != null || selectedCustomer != null}" href="/rocmovies"
+                        class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-full transition duration-300"
+                        th:text="#{filter.reset}">
+                        Réinitialiser
+                    </a>
+                </div>
+            </form>
+
+            <!-- Affichage des filtres actifs -->
+            <div th:if="${selectedStyle != null || selectedCustomer != null}" class="mt-6 text-center">
+                <p class="text-lg text-gray-300">
+                    <span>Filtres actifs:</span>
+                    <span th:if="${selectedStyle != null && selectedCustomer != null}" class="ml-2">
+                        Films de genre <span class="font-semibold text-secondary"
+                            th:text="${selectedStyle?.styleName}">Genre</span>
+                        empruntés par <span class="font-semibold text-secondary"
+                            th:text="${selectedCustomer?.name}">Client</span>
+                    </span>
+                    <span th:if="${selectedStyle != null && selectedCustomer == null}" class="ml-2">
+                        Films de genre <span class="font-semibold text-secondary"
+                            th:text="${selectedStyle?.styleName}">Genre</span>
+                    </span>
+                    <span th:if="${selectedCustomer != null && selectedStyle == null}" class="ml-2">
+                        Films empruntés par <span class="font-semibold text-secondary"
+                            th:text="${selectedCustomer?.name}">Client</span>
+                    </span>
+                </p>
             </div>
-        </form>
-
-        <!-- Current Filter Display -->
-        <div th:if="${selectedStyle}" class="mb-8 text-center">
-            <p class="text-lg text-gray-300">
-                <span th:text="#{filter.current}">Films filtrés par genre:</span>
-                <span class="font-semibold text-secondary" th:text="${selectedStyle.styleName}">Genre</span>
-                <a href="/rocmovies" class="ml-2 text-blue-400 hover:text-blue-300 underline" th:text="#{filter.reset}">Réinitialiser le filtre</a>
-            </p>
         </div>
-
         <!-- Movies Grid -->
         <div id="movies" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Movie Card (repeated for each movie) -->
-            <div th:each="movie : ${movies}" class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+            <div th:each="movie : ${movies}"
+                class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
                 <div class="relative">
-                    <img
-                        th:src="@{affiche_2.jpg}"
-                        class="w-full h-96 object-cover"
-                        th:alt="${movie.title}"
-                    />
+                    <img th:src="@{affiche_2.jpg}" class="w-full h-96 object-cover" th:alt="${movie.title}" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-4">
-                        <h2 class="text-2xl font-bold text-white mb-2" th:text="${movie.title}">Movie Title</h2>
+                        <h2 class="text-2xl font-bold text-white mb-2" th:text="${movie?.title}">Movie Title</h2>
                         <p class="text-sm text-gray-300">
-                            <span th:text="#{movie.year}">Année</span>: <span th:text="'(' + ${movie.productionYear} + ')'">Year</span>
+                            <span th:text="#{movie.year}">Année</span>: <span
+                                th:text="'(' + ${movie?.productionYear} + ')'">Year</span>
                         </p>
                     </div>
                 </div>
                 <div class="p-4 space-y-4">
                     <p class="text-sm text-gray-400">
-                        <span th:text="#{movie.genre}">Genre:</span> <span class="text-secondary font-semibold" th:text="${movie.style.styleName}">Movie Style</span>
+                        <span th:text="#{movie.genre}">Genre:</span>
+                        <span class="text-secondary font-semibold" th:text="${movie?.style?.styleName}">Movie
+                            Style</span>
                     </p>
                     <!-- description section -->
                     <p class="text-sm text-gray-400">
-                        <span th:text="#{movie.description}">Description:</span> <span class="text-secondary font-semibold" th:text="${movie.description}">Description</span>
+                        <span th:text="#{movie.description}">Description:</span> <span
+                            class="text-secondary font-semibold" th:text="${movie.description}">Description</span>
                     </p>
                     <div class="flex justify-between items-center">
                         <div>
-                            <span class="text-yellow-500 font-bold text-sm" th:text="#{movie.reference}">Référence</span>
+                            <span class="text-yellow-500 font-bold text-sm"
+                                th:text="#{movie.reference}">Référence</span>
                             <span class="text-2xl font-bold ml-2" th:text="${movie.reference}">Référence</span>
                         </div>
-                        <a th:href="@{'/movie/' + ${movie.idMovie}}" class="inline-block px-4 py-2 text-white bg-secondary hover:bg-red-700 rounded-full transition duration-300" th:text="#{movie.details}">
+                        <a th:href="@{'/movie/' + ${movie.idMovie}}"
+                            class="inline-block px-4 py-2 text-white bg-secondary hover:bg-red-700 rounded-full transition duration-300"
+                            th:text="#{movie.details}">
                             Détails
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Section Emprunts -->
 
+        <!-- Après la grille de films -->
+        <div class="mt-8 flex flex-col items-center">
+            <nav aria-label="Pagination" class="mb-4">
+                <ul class="flex space-x-2">
+                    <li>
+                        <a th:if="${currentPage > 0}"
+                            th:href="@{/(page=${currentPage - 1}, size=${size}, style=${styleId}, customer=${customerId})}"
+                            class="px-4 py-2 bg-gray-800 text-gray-300 rounded-md hover:bg-gray-700">
+                            &laquo;
+                        </a>
+                        <span th:unless="${currentPage > 0}"
+                            class="px-4 py-2 bg-gray-700 text-gray-500 rounded-md cursor-not-allowed">
+                            &laquo;
+                        </span>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, totalPages > 8 ? 7 : totalPages - 1)}">
+                        <a th:if="${currentPage == i}" class="px-4 py-2 bg-secondary text-white rounded-md font-bold"
+                            th:text="${i + 1}"></a>
+                        <a th:unless="${currentPage == i}"
+                            th:href="@{/(page=${i}, size=${size}, style=${styleId}, customer=${customerId})}"
+                            class="px-4 py-2 bg-gray-800 text-gray-300 rounded-md hover:bg-gray-700"
+                            th:text="${i + 1}"></a>
+                    </li>
+
+                    <li th:if="${totalPages > 8}">
+                        <span class="px-2 text-gray-400">...</span>
+                    </li>
+
+                    <li th:if="${totalPages > 8}">
+                        <a th:href="@{/(page=${totalPages - 1}, size=${size}, style=${styleId}, customer=${customerId})}"
+                            class="px-4 py-2 bg-gray-800 text-gray-300 rounded-md hover:bg-gray-700"
+                            th:text="${totalPages}"></a>
+                    </li>
+
+                    <li>
+                        <a th:if="${currentPage < totalPages - 1}"
+                            th:href="@{/(page=${currentPage + 1}, size=${size}, style=${styleId}, customer=${customerId})}"
+                            class="px-4 py-2 bg-gray-800 text-gray-300 rounded-md hover:bg-gray-700">
+                            &raquo;
+                        </a>
+                        <span th:unless="${currentPage < totalPages - 1}"
+                            class="px-4 py-2 bg-gray-700 text-gray-500 rounded-md cursor-not-allowed">
+                            &raquo;
+                        </span>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Informations sur la pagination -->
+            <p class="text-sm text-gray-400">
+                Affichage de <span th:text="${movies.size()}">6</span> sur <span th:text="${totalItems}">20</span> films
+            </p>
+        </div>
+        <!-- Section Emprunts -->
         <div class="mt-16">
             <h2 class="text-3xl font-bold mb-8 text-center">Emprunts</h2>
-                    <!-- Filtre par Genre et Client -->
-        <form action="/rocmovies" method="get" class="mb-12 bg-gray-800 p-6 rounded-lg shadow-lg">
-            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-                <!-- Filtre par Client -->
-                <label for="customer" class="text-lg font-medium text-gray-300">Filtrer par client:</label>
-                <select id="customer" name="customer" class="form-select mt-1 block w-full md:w-64 pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary rounded-md">
-                    <option value="">Tous les clients</option>
-                    <option th:each="customer : ${allCustomers}" 
-                            th:value="${customer.customerId}" 
-                            th:text="${customer.name}"
-                            th:selected="${customer.customerId} == ${selectedCustomer?.customerId}">
-                        Client
-                    </option>
-                </select>
-                <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition duration-300" th:text="#{filter.button}">
-                    Filtrer
-                </button>
+
+            <!-- Note informative sur le filtrage -->
+            <div class="mb-6 text-center">
+                <p class="text-lg text-gray-300">
+                    <span>Utilisez le filtre client en haut de page pour filtrer les emprunts</span>
+                    <span th:if="${selectedCustomer}" class="ml-2">
+                        - Actuellement filtré par : <span class="font-semibold text-secondary"
+                            th:text="${selectedCustomer.name}">Client</span>
+                    </span>
+                </p>
             </div>
-        </form>
+
             <table class="min-w-full bg-gray-800">
                 <thead>
                     <tr>
@@ -144,10 +244,11 @@
                 </thead>
                 <tbody>
                     <tr th:each="borrow : ${borrows}" class="text-center border-t border-gray-700">
-                        <td class="py-2" th:text="${borrow.customer.name}">Nom client</td>
-                        <td class="py-2" th:text="${borrow.movie.title}">Titre du film</td>
-                        <td class="py-2" th:text="${#dates.format(borrow.date, 'dd/MM/yyyy')}">Date</td>
-                        <td class="py-2" th:text="${borrow.status}">Status</td>
+                        <td class="py-2" th:text="${borrow?.customer?.name}">Nom client</td>
+                        <td class="py-2" th:text="${borrow?.movie?.title}">Titre du film</td>
+                        <td class="py-2"
+                            th:text="${borrow?.date != null ? #dates.format(borrow.date, 'dd/MM/yyyy') : ''}">Date</td>
+                        <td class="py-2" th:text="${borrow?.status}">Status</td>
                     </tr>
                 </tbody>
             </table>
@@ -158,32 +259,38 @@
             <div class="flex overflow-x-auto space-x-6 pb-4">
                 <!-- Repeat this for each upcoming movie -->
                 <div class="flex-none w-64">
-                    <img src="https://media.senscritique.com/media/000022442264/300/captain_america_brave_new_world.png" alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                    <img src="https://media.senscritique.com/media/000022442264/300/captain_america_brave_new_world.png"
+                        alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
                     <h3 class="mt-2 text-lg font-semibold">Captain America: Brave New World</h3>
                     <p class="text-sm text-gray-400">12 février 2025 </p>
                 </div>
                 <div class="flex-none w-64">
-                    <img src="https://media.senscritique.com/media/000022425435/300/queer.jpg" alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                    <img src="https://media.senscritique.com/media/000022425435/300/queer.jpg" alt="Upcoming Movie"
+                        class="w-full h-96 object-cover rounded-lg shadow-lg">
                     <h3 class="mt-2 text-lg font-semibold">Queer</h3>
                     <p class="text-sm text-gray-400">13 février 2025 </p>
                 </div>
                 <div class="flex-none w-64">
-                    <img src="https://media.senscritique.com/media/000022323112/300/pinocchio_unstrung.jpg" alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                    <img src="https://media.senscritique.com/media/000022323112/300/pinocchio_unstrung.jpg"
+                        alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
                     <h3 class="mt-2 text-lg font-semibold">Pinocchio Unstrung</h3>
                     <p class="text-sm text-gray-400">18 janvier 2025</p>
                 </div>
                 <div class="flex-none w-64">
-                    <img src="https://media.senscritique.com/media/000022414221/300/bird.jpg" alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                    <img src="https://media.senscritique.com/media/000022414221/300/bird.jpg" alt="Upcoming Movie"
+                        class="w-full h-96 object-cover rounded-lg shadow-lg">
                     <h3 class="mt-2 text-lg font-semibold">Bird</h3>
                     <p class="text-sm text-gray-400">1 janvier 2025</p>
                 </div>
                 <div class="flex-none w-64">
-                    <img src="https://media.senscritique.com/media/000022366168/300/criminal_squad_pantera.jpg" alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                    <img src="https://media.senscritique.com/media/000022366168/300/criminal_squad_pantera.jpg"
+                        alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
                     <h3 class="mt-2 text-lg font-semibold">Criminal Squad - Pantera</h3>
                     <p class="text-sm text-gray-400">8 janvier 2025</p>
                 </div>
                 <div class="flex-none w-64">
-                    <img src="https://media.senscritique.com/media/000022202456/300/vol_a_haut_risque.png" alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                    <img src="https://media.senscritique.com/media/000022202456/300/vol_a_haut_risque.png"
+                        alt="Upcoming Movie" class="w-full h-96 object-cover rounded-lg shadow-lg">
                     <h3 class="mt-2 text-lg font-semibold">Vol à haut risque</h3>
                     <p class="text-sm text-gray-400">22 janvier 2025</p>
                 </div>
@@ -194,13 +301,13 @@
 
     <!-- Decorative Elements -->
     <div class="fixed top-1/2 left-0 transform -translate-y-1/2 w-12 h-64 bg-secondary opacity-50 rounded-r-full"></div>
-    <div class="fixed top-1/2 right-0 transform -translate-y-1/2 w-12 h-64 bg-secondary opacity-50 rounded-l-full"></div>
+    <div class="fixed top-1/2 right-0 transform -translate-y-1/2 w-12 h-64 bg-secondary opacity-50 rounded-l-full">
+    </div>
 
     <!-- Include Footer -->
     <div th:replace="~{layout :: footer}"></div>
 
     <script>
-        // Add some interactivity
         document.querySelectorAll('.movie-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.querySelector('.movie-details').classList.remove('opacity-0');
@@ -211,4 +318,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -9,6 +9,9 @@ import com.ndduroc.rocmovies.Services.ICustomerService;
 import com.ndduroc.rocmovies.Services.IMovieService;
 import com.ndduroc.rocmovies.Services.IStyleService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Set; 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,59 +48,78 @@ public class HelloController {
     public String index(
             @RequestParam(name = "style", required = false) Long styleId,
             @RequestParam(name = "customer", required = false) Long customerId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "6") int size,
             Model model) {
         try {
-            // Gestion du filtrage par style pour les films
-            List<Movie> movies = movieService.getListMovies();
+            Pageable pageable = PageRequest.of(page, size);
+            
             Style selectedStyle = null;
-
+            Customer selectedCustomer = null;
+            Page<Movie> moviePage;
+            
             if (styleId != null) {
                 Optional<Style> optStyle = styleService.getStyleById(styleId);
                 if (optStyle.isPresent()) {
                     selectedStyle = optStyle.get();
-                    movies = movies.stream()
-                        .filter(movie -> movie.getStyle() != null && movie.getStyle().getStyleId().equals(styleId))
-                        .collect(Collectors.toList());
+                    moviePage = movieService.getMoviesByStyleId(styleId, pageable);
+                } else {
+                    moviePage = movieService.getPaginatedMovies(pageable);
                 }
+            } else {
+                moviePage = movieService.getPaginatedMovies(pageable);
             }
-
-            // Gestion du filtrage par client pour les emprunts
-            List<Borrow> borrows;
-            Customer selectedCustomer = null;
+            
+            List<Movie> movies = moviePage.getContent();
+            
+            List<Borrow> borrows = borrowService.getAllBorrows();
             
             if (customerId != null) {
-                borrows = borrowService.getBorrowsByCustomerId(customerId);
                 Optional<Customer> optCustomer = customerService.getCustomerById(customerId);
                 if (optCustomer.isPresent()) {
                     selectedCustomer = optCustomer.get();
+                    borrows = borrowService.getBorrowsByCustomerId(customerId);
+                    
+                    if (selectedStyle != null) {
+                        Set<Object> borrowedMovieIds = borrows.stream()
+                            .map(b -> b.getMovie().getIdMovie())
+                            .collect(Collectors.toSet());
+                        
+                        movies = movies.stream()
+                            .filter(movie -> borrowedMovieIds.contains(movie.getIdMovie()))
+                            .collect(Collectors.toList());
+                    }
                 }
-            } else {
-                borrows = borrowService.getAllBorrows();
             }
-
-            // Récupération des listes pour les filtres
+            
             List<Style> allStyles = styleService.getListStyles();
             List<Customer> allCustomers = customerService.getAllCustomers();
-
-            // Ajout des attributs au modèle
-            model.addAttribute("welcomeMessage", welcomeMessage);
+            
             model.addAttribute("movies", movies);
+            model.addAttribute("welcomeMessage", welcomeMessage);
             model.addAttribute("selectedStyle", selectedStyle);
             model.addAttribute("allStyles", allStyles);
             model.addAttribute("borrows", borrows);
             model.addAttribute("selectedCustomer", selectedCustomer);
             model.addAttribute("allCustomers", allCustomers);
-
+            
+            model.addAttribute("styleId", styleId);
+            model.addAttribute("customerId", customerId);
+            
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", moviePage.getTotalPages());
+            model.addAttribute("totalItems", moviePage.getTotalElements());
+            model.addAttribute("size", size);
+            
             return "hello";
         } catch (Exception e) {
             throw new ResponseStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Erreur lors du chargement de la page d'accueil",
+                "Erreur lors du chargement de la page d'accueil: " + e.getMessage(),
                 e
             );
         }
     }
-    
     @GetMapping("/movie/{id}")
     public String getMovieById(@PathVariable long id, Model model) {
         try {

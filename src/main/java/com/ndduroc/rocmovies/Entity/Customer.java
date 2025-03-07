@@ -23,10 +23,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Borrow> borrows;
     
-    // Constructeurs
     public Customer() {}
     
-    // Getters et setters
     public Long getCustomerId() {
         return customerId;
     }

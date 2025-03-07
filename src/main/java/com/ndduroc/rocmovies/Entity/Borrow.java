@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Size;
 public class Borrow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer borrowId;
+    private Long borrowId;
     
     @Temporal(TemporalType.DATE)
     private Date date;

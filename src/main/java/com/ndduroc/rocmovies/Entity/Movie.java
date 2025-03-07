@@ -19,7 +19,7 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    private Integer idMovie;
+    private Long idMovie;
 
     @NotBlank
     @Size(max = 100)
@@ -44,7 +44,7 @@ public class Movie {
 
     public Movie() {}
 
-    public Movie(Integer idMovie, String title, Style style, int productionYear, String reference, String description) {
+    public Movie(Long idMovie, String title, Style style, int productionYear, String reference, String description) {
         this.idMovie = idMovie;
         this.title = title;
         this.style = style;
@@ -54,11 +54,11 @@ public class Movie {
     }
 
     // Getters and setters
-    public Integer getIdMovie() {
+    public Long getIdMovie() {
         return idMovie;
     }
 
-    public void setIdMovie(Integer idMovie) {
+    public void setIdMovie(Long idMovie) {
         this.idMovie = idMovie;
     }
 

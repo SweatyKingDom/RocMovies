@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import com.ndduroc.rocmovies.Entity.Borrow; 
 import com.ndduroc.rocmovies.Repositories.BorrowRepository;
 
-@Service public class BorrowService implements IBorrowService {
+@Service 
+public class BorrowService implements IBorrowService {
     private final BorrowRepository borrowRepository;
 
     public BorrowService(BorrowRepository borrowRepository) {
@@ -16,5 +17,13 @@ import com.ndduroc.rocmovies.Repositories.BorrowRepository;
     @Override
     public List<Borrow> getAllBorrows() {
         return borrowRepository.findAll();
+    }
+    
+    @Override
+    public List<Borrow> getBorrowsByCustomerId(Long customerId) {
+        if (customerId == null) {
+            return getAllBorrows();
+        }
+        return borrowRepository.findByCustomerCustomerId(customerId);
     }
 }

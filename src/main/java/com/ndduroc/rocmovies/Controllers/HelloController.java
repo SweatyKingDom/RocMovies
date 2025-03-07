@@ -1,9 +1,11 @@
 package com.ndduroc.rocmovies.Controllers;
 
 import com.ndduroc.rocmovies.Entity.Borrow;
+import com.ndduroc.rocmovies.Entity.Customer;
 import com.ndduroc.rocmovies.Entity.Movie;
 import com.ndduroc.rocmovies.Entity.Style;
 import com.ndduroc.rocmovies.Services.IBorrowService;
+import com.ndduroc.rocmovies.Services.ICustomerService;
 import com.ndduroc.rocmovies.Services.IMovieService;
 import com.ndduroc.rocmovies.Services.IStyleService;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,11 +36,17 @@ public class HelloController {
 
     @Autowired
     private IBorrowService borrowService;
-
+    
+    @Autowired
+    private ICustomerService customerService;
 
     @GetMapping("/")
-    public String index(@RequestParam(name = "style", required = false) Long styleId, Model model) {
+    public String index(
+            @RequestParam(name = "style", required = false) Long styleId,
+            @RequestParam(name = "customer", required = false) Long customerId,
+            Model model) {
         try {
+            // Gestion du filtrage par style pour les films
             List<Movie> movies = movieService.getListMovies();
             Style selectedStyle = null;
 
@@ -52,14 +60,32 @@ public class HelloController {
                 }
             }
 
-            List<Style> allStyles = styleService.getListStyles();
-            List<Borrow> borrows = borrowService.getAllBorrows();
+            // Gestion du filtrage par client pour les emprunts
+            List<Borrow> borrows;
+            Customer selectedCustomer = null;
+            
+            if (customerId != null) {
+                borrows = borrowService.getBorrowsByCustomerId(customerId);
+                Optional<Customer> optCustomer = customerService.getCustomerById(customerId);
+                if (optCustomer.isPresent()) {
+                    selectedCustomer = optCustomer.get();
+                }
+            } else {
+                borrows = borrowService.getAllBorrows();
+            }
 
+            // Récupération des listes pour les filtres
+            List<Style> allStyles = styleService.getListStyles();
+            List<Customer> allCustomers = customerService.getAllCustomers();
+
+            // Ajout des attributs au modèle
             model.addAttribute("welcomeMessage", welcomeMessage);
             model.addAttribute("movies", movies);
             model.addAttribute("selectedStyle", selectedStyle);
             model.addAttribute("allStyles", allStyles);
             model.addAttribute("borrows", borrows);
+            model.addAttribute("selectedCustomer", selectedCustomer);
+            model.addAttribute("allCustomers", allCustomers);
 
             return "hello";
         } catch (Exception e) {

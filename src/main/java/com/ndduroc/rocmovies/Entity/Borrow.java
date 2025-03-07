@@ -37,6 +37,10 @@ public class Borrow {
         return customer;
     }
     
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+    
     public Date getDate() {
         return date;
     }

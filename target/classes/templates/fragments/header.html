@@ -4,6 +4,7 @@
         <div class="text-2xl font-bold">RocMovies</div>
         <div class="flex items-center space-x-4">
             <a href="http://localhost:8080/rocmovies/" class="hover:text-gray-300" th:text="#{nav.home}">Accueil</a>
+            <a href="http://localhost:8080/rocmovies/transfer" class="hover:text-gray-300" th:text="#{nav.transfer}">Transfert Abonnement</a>           
             <form th:action="@{/}" method="get" class="flex items-center">
                 <select name="lang" id="languageSelect" class="bg-white text-primary px-2 py-1 rounded" onchange="this.form.submit()">
                     <option value="fr" th:selected="${#locale.language == 'fr'}" th:text="#{lang.fr}">Français</option>
